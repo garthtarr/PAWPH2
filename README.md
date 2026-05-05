@@ -288,3 +288,9 @@ Original ncvreg source: https://github.com/pbreheny/ncvreg
 ## Licence
 
 GPL-3
+
+---
+
+## Acknowledgements
+
+This package was developed with the assistance of [Posit Assistant](https://posit.co), an AI coding assistant powered by [Claude](https://www.anthropic.com/claude) (Anthropic). Posit Assistant helped consolidate the original codebase into a well-structured R package, modernise the C code for compatibility with current toolchains, and produce this documentation.

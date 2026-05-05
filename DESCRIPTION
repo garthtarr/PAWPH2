@@ -2,8 +2,14 @@ Package: PAWPH2
 Title: Penalized Adaptive Robust Proportional Hazard Model
 Version: 0.1.0
 Authors@R: c(
-    person("Garth", "Tarr", email = "garth.tarr@sydney.edu.au",
+    person("Garth", "Tarr", email = "garth.tarr@gmail.com",
            role = c("aut", "cre")),
+    person("Bin", "Luo", role = "aut",
+           comment = c(note = "Original author of the PAWPH method")),
+    person("Xiaoli", "Gao", role = "aut",
+           comment = c(note = "Original author of the PAWPH method")),
+    person("Susan", "Halabi", role = "aut",
+           comment = c(note = "Original author of the PAWPH method")),
     person("Patrick", "Breheny",
            email = "patrick-breheny@uiowa.edu",
            role = "ctb",
@@ -12,7 +18,8 @@ Authors@R: c(
 Description: Fits the Penalized Adaptive Weighted Proportional Hazard (PAWPH)
     model for robust survival analysis in the presence of outliers. Uses
     per-observation intercepts and an adaptive lasso penalty to simultaneously
-    perform variable selection and outlier detection. Incorporates a modified
+    perform variable selection and outlier detection. Based on the method of
+    Luo, Gao, and Halabi (2022, <doi:10.1002/sim.9424>). Incorporates a modified
     Cox regularisation routine adapted from the ncvreg package
     (Breheny and Huang, 2011, <doi:10.1214/10-AOAS388>).
 License: GPL-3

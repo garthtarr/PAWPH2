@@ -6,10 +6,17 @@
 \alias{PAWPH2-package}
 \title{PAWPH2: Penalized Adaptive Robust Proportional Hazard Model}
 \description{
-Fits the Penalized Adaptive Weighted Proportional Hazard (PAWPH) model for robust survival analysis in the presence of outliers. Uses per-observation intercepts and an adaptive lasso penalty to simultaneously perform variable selection and outlier detection. Incorporates a modified Cox regularisation routine adapted from the ncvreg package (Breheny and Huang, 2011, \doi{10.1214/10-AOAS388}).
+Fits the Penalized Adaptive Weighted Proportional Hazard (PAWPH) model for robust survival analysis in the presence of outliers. Uses per-observation intercepts and an adaptive lasso penalty to simultaneously perform variable selection and outlier detection. Based on the method of Luo, Gao, and Halabi (2022, \doi{10.1002/sim.9424}). Incorporates a modified Cox regularisation routine adapted from the ncvreg package (Breheny and Huang, 2011, \doi{10.1214/10-AOAS388}).
 }
 \author{
-\strong{Maintainer}: Garth Tarr \email{garth.tarr@sydney.edu.au}
+\strong{Maintainer}: Garth Tarr \email{garth.tarr@gmail.com}
+
+Authors:
+\itemize{
+  \item Bin Luo (Original author of the PAWPH method)
+  \item Xiaoli Gao (Original author of the PAWPH method)
+  \item Susan Halabi (Original author of the PAWPH method)
+}
 
 Other contributors:
 \itemize{
