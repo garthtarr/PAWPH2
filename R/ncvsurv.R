@@ -7,7 +7,7 @@
 # detection mechanism. These are passed through to the underlying C routine
 # cdfit_cox_dh().
 
-#' Fit a penalised Cox regression model (internal)
+#' Fit a penalised Cox regression model
 #'
 #' Fits a regularisation path for Cox proportional hazards regression using
 #' lasso, MCP, or SCAD penalties. This is an internal function adapted from
@@ -44,7 +44,7 @@
 #'   nonconvex penalized regression. *Annals of Applied Statistics*, 5(1),
 #'   232–253. \doi{10.1214/10-AOAS388}
 #'
-#' @keywords internal
+#' @export
 ncvsurv <- function(X, y,
                     penalty = c("MCP", "SCAD", "lasso"),
                     gamma = switch(penalty, SCAD = 3.7, 3),

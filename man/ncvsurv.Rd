@@ -2,7 +2,7 @@
 % Please edit documentation in R/ncvsurv.R
 \name{ncvsurv}
 \alias{ncvsurv}
-\title{Fit a penalised Cox regression model (internal)}
+\title{Fit a penalised Cox regression model}
 \usage{
 ncvsurv(
   X,
@@ -81,4 +81,3 @@ Breheny P and Huang J (2011). Coordinate descent algorithms for
 nonconvex penalized regression. \emph{Annals of Applied Statistics}, 5(1),
 232–253. \doi{10.1214/10-AOAS388}
 }
-\keyword{internal}
