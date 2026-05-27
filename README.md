@@ -4,8 +4,6 @@
 
 **PAWPH2** is an R package implementing the Penalized Adaptive Weighted Proportional Hazard (PAWPH) model for robust survival analysis. The method simultaneously performs variable selection and outlier detection in Cox proportional hazards regression by augmenting the model with per-observation intercepts that are penalised via an adaptive lasso.
 
----
-
 ## Origins and Source Materials
 
 This package consolidates two previously separate codebases into a single, self-contained R package:
@@ -58,8 +56,6 @@ Rather than maintain a dependency on the local `ncvreg2` package, PAWPH2 copies 
 
 All adapted files carry attribution comments identifying the original source (https://github.com/pbreheny/ncvreg) and are covered under the GPL-3 licence, consistent with the original.
 
----
-
 ## Changes Made to Source Material
 
 ### C code
@@ -105,8 +101,11 @@ The functional logic is unchanged. Two updates were required to compile with mod
 **`lik.surv()`** (internal, `lik-surv.R`):
 
 - Added `val.basehaz <- pmax(val.basehaz, .Machine$double.eps)` after the `gbm::basehaz.gbm()` call for the instantaneous hazard. The GBM smoother can return slightly negative values due to smoothing artefacts; passing these to `log()` produced `NaN` warnings. Clamping to `.Machine$double.eps` before the log is taken suppresses the warning and is physically correct (hazard rates cannot be negative).
+- Added a result cache keyed on the combined train and test linear predictors. At the high-lambda (sparse) end of the regularisation path, consecutive lambda values often produce identical linear predictors (the model has not yet changed). Previously each lambda triggered two independent `gbm::basehaz.gbm()` calls regardless. The cache detects duplicate predictor columns and reuses the already-computed result, reducing the number of GBM fits proportionally to the number of leading null-model lambdas.
 
----
+**`cvf.prcox()`** (internal, `prcox.R`):
+
+- Replaced the `cbind(X, diag(n_train))` + matrix multiply approach for computing training linear predictors with a direct two-term sum: `X %*% beta[1:p,] + beta[(p+1):(p+n_train),]`. The old code materialised a dense (n_train × n_train) identity matrix solely to perform the augmented matrix product, at a cost of O(n²) memory and time per fold. The new code exploits the structure of the identity block directly, reducing the computation to O(n·p + n·L) — equivalent in result, cheaper by roughly a factor of n/p for typical problem sizes.
 
 ## Method Description
 
@@ -131,8 +130,6 @@ After Step 3, any intercept with `|γ_i| < 0.5` is set to zero (a thresholding s
 - The validation metric is the mean negative log-likelihood, with the top 20% of individual losses clipped before averaging. This reduces the influence of observations with extreme likelihood values on lambda selection.
 - The baseline hazard for the test-set likelihood is estimated using the GBM smooth estimator (`gbm::basehaz.gbm()`).
 
----
-
 ## Installation
 
 ```r
@@ -140,12 +137,8 @@ After Step 3, any intercept with `|γ_i| < 0.5` is set to zero (a thresholding s
 install.packages("~/PAWPH2", repos = NULL, type = "source")
 
 # Or, if using devtools:
-devtools::install("~/PAWPH2")
+pak::pak("garthtarr/PAWPH2")
 ```
-
-**Dependencies:** `survival`, `gbm`, `dplyr`, `doParallel`, `foreach`, `parallel`
-
----
 
 ## Usage
 
@@ -246,7 +239,6 @@ se_res <- SE.boot(y, X, B = 100, seed = 5312, alpha = 1)
 getCI(se_res$betaHat[, 1], b = se_res$betaHat_re[1])
 ```
 
----
 
 ## Package structure
 
@@ -273,8 +265,6 @@ PAWPH2/
     └── Makevars
 ```
 
----
-
 ## Attribution
 
 The C source files `cox-dh.c`, `standardize.c`, and `maxprod.c`, along with the R functions `ncvsurv()`, `std()`, `setupLambdaCox()`, `convexMin()`, `lamNames()`, `coef.ncvreg()`, `predict.ncvreg()`, and `predict.ncvsurv()` are adapted from **ncvreg v3.13.0** by Patrick Breheny (University of Iowa), licensed under GPL-3.
@@ -283,13 +273,9 @@ The C source files `cox-dh.c`, `standardize.c`, and `maxprod.c`, along with the 
 
 Original ncvreg source: https://github.com/pbreheny/ncvreg
 
----
-
 ## Licence
 
 GPL-3
-
----
 
 ## Acknowledgements
 

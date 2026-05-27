@@ -68,8 +68,12 @@ cvf.prcox <- function(i, XX, y, fold, cv.args) {
   prop.out <- apply(fit.i$beta, 2, function(beta) {
     sum(beta[-(1:p)] != 0) / length(cv.args$y)
   })
-  X.aug <- cbind(cv.args$X, diag(nrow(cv.args$X)))
-  lp.train <- X.aug %*% fit.i$beta
+  # Avoid materialising the (n_train x n_train) identity block.
+  # lp[i,] = X[i,] %*% beta[1:p,] + gamma[i,], where gamma[i,] is the i-th
+  # row of the per-observation intercept block.
+  n_train <- nrow(cv.args$X)
+  lp.train <- cv.args$X %*% fit.i$beta[seq_len(p), , drop = FALSE] +
+              fit.i$beta[p + seq_len(n_train), , drop = FALSE]
   test.X <- XX[fold == i, , drop=FALSE]
   test.y <- y[fold == i, ]
   lp.test <- test.X %*% fit.i$beta[1:p, ]

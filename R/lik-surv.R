@@ -20,7 +20,19 @@
 #'
 #' @keywords internal
 lik.surv <- function(t.train, delta.train, lp.train, t.test, delta.test, lp.test) {
-  lik.mat <- -log(sapply(1:ncol(lp.train), function(j) {
+  L <- ncol(lp.train)
+
+  # Build a cheap string key from the combined train+test predictors so that
+  # lambda values with identical linear predictors reuse the GBM result rather
+  # than refitting. This most commonly fires at the sparse (high-lambda) end of
+  # the path where the model has not yet changed.
+  cache_keys <- vapply(
+    seq_len(L),
+    function(j) paste(lp.train[, j], lp.test[, j], sep = "\v", collapse = ","),
+    character(1)
+  )
+
+  compute_col <- function(j) {
     if (sum(!is.na(lp.train[, j])) == 0) {
       rep(0, length(t.test))
     } else {
@@ -34,7 +46,22 @@ lik.surv <- function(t.train, delta.train, lp.train, t.test, delta.test, lp.test
       St <- St.base^(exp(lp.test[, j]))
       dplyr::if_else(delta.test == 1, St * val.basehaz * exp(lp.test[, j]), St)
     }
-  }))
+  }
+
+  cache   <- list()
+  results <- vector("list", L)
+  for (j in seq_len(L)) {
+    key <- cache_keys[[j]]
+    if (!is.null(cache[[key]])) {
+      results[[j]] <- cache[[key]]
+    } else {
+      val          <- compute_col(j)
+      cache[[key]] <- val
+      results[[j]] <- val
+    }
+  }
+
+  lik.mat <- -log(do.call(cbind, results))
   lik.mat[lik.mat == Inf] <- NA
   lik.mat
 }
