@@ -13,14 +13,15 @@ Fits the Penalized Adaptive Weighted Proportional Hazard (PAWPH) model for robus
 
 Authors:
 \itemize{
-  \item Bin Luo (Original author of the PAWPH method)
-  \item Xiaoli Gao (Original author of the PAWPH method)
-  \item Susan Halabi (Original author of the PAWPH method)
+  \item Garth Tarr \email{garth.tarr@gmail.com}
+  \item Bin Luo (note: Original author of the PAWPH method)
+  \item Xiaoli Gao (note: Original author of the PAWPH method)
+  \item Susan Halabi (note: Original author of the PAWPH method)
 }
 
 Other contributors:
 \itemize{
-  \item Patrick Breheny \email{patrick-breheny@uiowa.edu} (\href{https://orcid.org/0000-0002-0650-1119}{ORCID}) (Author of ncvreg; C and R code adapted from ncvreg v3.13.0) [contributor]
+  \item Patrick Breheny \email{patrick-breheny@uiowa.edu} (\href{https://orcid.org/0000-0002-0650-1119}{ORCID}) (note: Author of ncvreg; C and R code adapted from ncvreg v3.13.0) [contributor]
 }
 
 }
